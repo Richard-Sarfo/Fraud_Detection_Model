@@ -26,7 +26,7 @@ from typing import Literal
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 import src
 from src.explain import FraudExplainer
@@ -64,6 +64,8 @@ class FeatureContributionOut(BaseModel):
 
 
 class PredictionOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     fraud_probability: float = Field(ge=0.0, le=1.0)
     decision: Literal["APPROVE", "REVIEW", "DECLINE"]
     threshold_used: float
@@ -81,6 +83,8 @@ class BatchOut(BaseModel):
 
 
 class HealthOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     status: Literal["ok", "error"]
     model_loaded: bool
     model_version: str | None
