@@ -21,7 +21,6 @@ services:
       - PYTHONPATH=/app
 
   train:
-    build: .
     image: fraud-detection:latest
     container_name: fraud-train
     profiles: ["train"]
@@ -33,7 +32,6 @@ services:
       - PYTHONPATH=/app
 
   api:
-    build: .
     image: fraud-detection:latest
     container_name: fraud-api
     command: >
@@ -49,11 +47,8 @@ services:
     environment:
       - PYTHONPATH=/app
       - MODEL_PATH=/app/models/champion.pkl
-    depends_on:
-      - jupyter
 
   test:
-    build: .
     image: fraud-detection:latest
     container_name: fraud-test
     profiles: ["test"]
