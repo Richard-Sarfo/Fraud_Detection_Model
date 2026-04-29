@@ -1,0 +1,64 @@
+services:
+  jupyter:
+    build: .
+    image: fraud-detection:latest
+    container_name: fraud-jupyter
+    command: >
+      jupyter lab
+        --ip=0.0.0.0
+        --port=8888
+        --no-browser
+        --allow-root
+        --ServerApp.token=''
+        --ServerApp.password=''
+        --ServerApp.root_dir=/app
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/app
+      - ./Data:/app/Data:ro
+    environment:
+      - PYTHONPATH=/app
+
+  train:
+    build: .
+    image: fraud-detection:latest
+    container_name: fraud-train
+    profiles: ["train"]
+    command: ["python", "-m", "src.train"]
+    volumes:
+      - ./:/app
+      - ./Data:/app/Data:ro
+    environment:
+      - PYTHONPATH=/app
+
+  api:
+    build: .
+    image: fraud-detection:latest
+    container_name: fraud-api
+    command: >
+      uvicorn src.api:app
+        --host 0.0.0.0
+        --port 8000
+        --workers 2
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models:ro
+      - ./src:/app/src:ro
+    environment:
+      - PYTHONPATH=/app
+      - MODEL_PATH=/app/models/champion.pkl
+    depends_on:
+      - jupyter
+
+  test:
+    build: .
+    image: fraud-detection:latest
+    container_name: fraud-test
+    profiles: ["test"]
+    command: ["pytest", "-v", "tests/"]
+    volumes:
+      - ./:/app
+    environment:
+      - PYTHONPATH=/app
