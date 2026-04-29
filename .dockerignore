@@ -1,0 +1,66 @@
+# Big assets — mounted as a volume by docker-compose, never bake into the image
+Data/
+data/raw/
+data/processed/
+*.csv
+*.parquet
+
+# Trained model artefacts
+models/*.pkl
+models/*.joblib
+models/*.json
+
+# Reports & figures
+reports/
+
+# Git internals
+.git/
+.gitignore
+.gitattributes
+
+# Notebooks side-output
+**/.ipynb_checkpoints/
+notebooks/
+
+# Python build / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+.kaggle/
+kaggle.json
+
+# Docker / build logs
+build.log
+*.log
+logs/
+
+# This file itself isn't needed in the image
+.dockerignore
+Dockerfile
+docker-compose.yml
+README.md
+fraud_detection_ml_model_plan.pdf
