@@ -255,8 +255,9 @@ def run(
     )
 
     # Persist artefacts.
-    joblib.dump(champion, MODEL_PATH)
-    logger.info("Wrote model -> %s", MODEL_PATH)
+    model_path = out_dir / "champion.pkl"
+    joblib.dump(champion, model_path)
+    logger.info("Wrote model -> %s", model_path)
 
     # Choose the cost-optimal threshold as the deployed default; the plan
     # says default 0.5 is almost always wrong on imbalanced data (§10.2).
@@ -306,8 +307,9 @@ def run(
         "library_versions": library_versions(),
         "seed": seed,
     }
-    METADATA_PATH.write_text(json.dumps(metadata, indent=2, default=str))
-    logger.info("Wrote metadata -> %s", METADATA_PATH)
+    metadata_path = out_dir / "metadata.json"
+    metadata_path.write_text(json.dumps(metadata, indent=2, default=str))
+    logger.info("Wrote metadata -> %s", metadata_path)
     logger.info("Done in %.1fs", time.perf_counter() - t0)
     return metadata
 
